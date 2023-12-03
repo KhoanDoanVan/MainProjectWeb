@@ -1,7 +1,7 @@
-// window.addEventListener('DOMContentLoaded', () => {
-//   const string = JSON.stringify(Cars);
-//   localStorage.setItem('Cars', string);
-// });
+window.addEventListener('DOMContentLoaded', () => {
+  const string = JSON.stringify(Cars);
+  localStorage.setItem('Cars', string);
+});
 
 
 
@@ -536,6 +536,7 @@ let Cars = [
   },
 ]
 
+
 window.addEventListener('DOMContentLoaded', () => {
     const dataCars = localStorage.getItem('Cars');
     if(dataCars){
@@ -623,7 +624,7 @@ buttonBodyHomeMauXe.addEventListener('click', () => {
 
 buttonBodyHomeUser.addEventListener('click', () => {
     window.scrollTo(0, 0);
-    if(userInfo !== null){
+    if(userInfo){
         bodyUser.style.display = 'block';
         bodyHome.style.display = 'none';
         renderInformationUser(userInfo);
@@ -655,7 +656,7 @@ buttonStoreHome.addEventListener('click', () => {
 
 buttonStoreCart.addEventListener('click', () => {
     window.scrollTo(0, 0);
-    if(userInfo !== null){
+    if(userInfo){
         bodyStore.style.display = 'none';
         bodyCart.style.display = 'block';
         renderInformationUser(userInfo);
@@ -684,7 +685,7 @@ buttonStoreCart.addEventListener('click', () => {
 buttonStoreGhim.addEventListener('click', () => {
 
     window.scrollTo(0, 0);
-    if(userInfo !== null){
+    if(userInfo){
         bodyGhim.style.display = 'block';
         bodyStore.style.display = 'none';
         renderInformationUser(userInfo);
@@ -710,7 +711,7 @@ buttonStoreGhim.addEventListener('click', () => {
 
 buttonStoreUser.addEventListener('click', () => {
     window.scrollTo(0, 0);
-    if(userInfo !== null){
+    if(userInfo){
         bodyUser.style.display = 'block';
         bodyStore.style.display = 'none';
         renderInformationUser(userInfo);
@@ -833,7 +834,7 @@ buttonUserCart.addEventListener('click', () => {
 
     bodyUser.style.display = 'block';
     bodyCart.style.display = 'none';
-    if(userInfo !== null){
+    if(userInfo){
         bodyUser.style.display = 'block';
         bodyHome.style.display = 'none';
         renderInformationUser(userInfo);
@@ -924,7 +925,7 @@ buttonUserInformationCar.addEventListener('click', () => {
 
     bodyUser.style.display = 'block';
     bodyInformationCar.style.display = 'none';
-    if(userInfo !== null){
+    if(userInfo){
         bodyUser.style.display = 'block';
         bodyHome.style.display = 'none';
         renderInformationUser(userInfo);
@@ -1239,6 +1240,11 @@ formWrapperBodyRegister.addEventListener('submit', (e) => {
         localStorage.setItem('PaymentXacNhan', initializePaymentDaMua);
         localStorage.setItem('PaymentTuChoi', initializePaymentDaTuChoi);
 
+        renderPageElement(Cars, totalPages, 1);
+
+        handleReloadCart(0);
+        handleReloadGhim(0);
+
     }
 })
 
@@ -1486,14 +1492,14 @@ const renderPageElement = (arrayCars, totalPages, currentPage) => {
 
   totalPages = totalPages;
   const firstItem = elementPerPage*(currentPage-1);
-  const lastItem = firstItem + elementPerPage;
+  const lastItem = firstItem + elementPerPage;  
   let ulMiddleItemList = '';
 
   if(arrayCars === undefined){
     arrayCars = Cars;
   }
 
-  if(userInfo !== null){
+  if(userInfo){
     for(let i = firstItem; i < lastItem; i++){
         if(arrayCars[i]){
           ulMiddleItemList +=
@@ -1946,12 +1952,16 @@ function handleCheckCart(check, nameCar, iconId){
 
 function renderCartActive(arrayCart){
 
-    for(let i = 0 ; i < arrayCart.length; i++){
-        let icon = document.getElementById(`iconCart-${arrayCart[i].id}`);
-
-        if(icon){
-            icon.style.color = 'darkred';
+    if(arrayCart){
+        for(let i = 0 ; i < arrayCart.length; i++){
+            let icon = document.getElementById(`iconCart-${arrayCart[i].id}`);
+    
+            if(icon){
+                icon.style.color = 'darkred';
+            }
         }
+    } else {
+        console.log('render Cart active is not valid')
     }
 }
 
@@ -2390,12 +2400,16 @@ function handleCheckGhim(check, nameCar, iconId){
 
 function renderGhimActive(arrayGhim){
 
-    for(let i = 0 ; i < arrayGhim.length; i++){
-        let icon = document.getElementById(`iconGhim-${arrayGhim[i].id}`);
-
-        if(icon){
-            icon.style.color = 'darkred';
+    if(arrayGhim){
+        for(let i = 0 ; i < arrayGhim.length; i++){
+            let icon = document.getElementById(`iconGhim-${arrayGhim[i].id}`);
+    
+            if(icon){
+                icon.style.color = 'darkred';
+            }
         }
+    } else {
+        console.log('render Ghim ACtive is not valid')
     }
 }
 
@@ -2426,7 +2440,7 @@ function findCarById(carId){
 const handleMoreInformation = (carId) => {
     window.scrollTo(0, 0);
 
-    if(userInfo !== null){
+    if(userInfo){
         const moreCar = findCarById(carId);
         if(carId){
             const postCarCurrent = JSON.stringify(moreCar);
@@ -2501,8 +2515,8 @@ const handleDangXuatUser = () => {
             }
     renderPageElement(Cars, totalPages, 1);
 
-    handleReloadCart(arrayCart?arrayCart.length:0);
-    handleReloadGhim(arrayGhim?arrayGhim.length:0);
+    handleReloadCart(0);
+    handleReloadGhim(0);
 
 }
 
@@ -3845,7 +3859,11 @@ buttonDSTTThanhToan.addEventListener('click', () => {
     bodyCart.style.display = 'block';
     bodyThanhToan.style.display = 'none';
     window.scrollTo(0, 0);
-
+    renderCartHome(arrayCart);
+    totalPrice = handleTongGia(arrayCart);
+    handleReloadCart(arrayCart?arrayCart.length:0);
+    renderTotalPrice(totalPrice);
+    renderPageElement(arrayCars, totalPages, 1);
 })
 
 
@@ -4168,6 +4186,7 @@ buttonDSTTThanhToanCurrent.addEventListener('click', () => {
     totalPrice = handleTongGia(arrayCart);
     handleReloadCart(arrayCart?arrayCart.length:0);
     renderTotalPrice(totalPrice);
+    renderPageElement(arrayCars, totalPages, 1);
 })
 
 
@@ -4223,7 +4242,7 @@ const thanhtoanCR = document.querySelector('.wrapper-body-thanhtoan-current #tha
 
 
 function handleUploadDataCR(valueTimeNowCR, valueCheckedPaymentCR){
-
+    console.log(arrayResultPaymentCR);
     for(let i = 0; i < arrayCart.length ; i++){
         for(let j = 0; j < arrayQuantityCarCurrent[i] ; j++){
             paymentCarCurrent[i].sothe = valueSoTheCR;
@@ -4642,11 +4661,13 @@ function renderTotalCurrent(listCart, quantityCar){
 window.addEventListener('DOMContentLoaded', () => {
   const dataCar = localStorage.getItem('Cars');
   Cars = JSON.parse(dataCar);
-  if(Cars.length % 6 == 0){
-                totalPages = Cars.length / 6;
-            } else {
-                totalPages = Math.ceil(Cars.length / 6);
-            }
+  if(Cars){
+    if(Cars.length % 6 == 0){
+        totalPages = Cars.length / 6;
+    } else {
+        totalPages = Math.ceil(Cars.length / 6);
+    }
+  }
 })
 
 
@@ -4719,12 +4740,14 @@ function handleCheckCart3(check, nameCar, iconId){
 
 function renderCartActive3(arrayCart){
 
-    for(let i = 0 ; i < arrayCart.length; i++){
-        let icon = document.getElementById(`iconCartInformation-${arrayCart[i].id}`);
-        let button = document.getElementById(`button-GhimInformation${arrayCart[i].id}`);
-        if(icon){
-            icon.style.color = 'black';
-            button.style.backgroundColor = 'darkred';
+    if(arrayCart){
+        for(let i = 0 ; i < arrayCart.length; i++){
+            let icon = document.getElementById(`iconCartInformation-${arrayCart[i].id}`);
+            let button = document.getElementById(`button-GhimInformation${arrayCart[i].id}`);
+            if(icon){
+                icon.style.color = 'black';
+                button.style.backgroundColor = 'darkred';
+            }
         }
     }
 }

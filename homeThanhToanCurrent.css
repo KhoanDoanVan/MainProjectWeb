@@ -255,6 +255,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: darkblue;
 }
 
 .wrapper-body-thanhtoan-current .wrapper-middle .wrapper-middle-box .middle-content .content-box ul li div:last-child button i{
